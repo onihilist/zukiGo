@@ -1,10 +1,7 @@
 # ZukiGo
+[![Go Reference](https://pkg.go.dev/badge/github.com/onihilist/zukigo.svg)](https://pkg.go.dev/github.com/onihilist/zukigo)
 
 **ZukiGo** is a lightweight Go client library that acts as a wrapper for a third-party OpenAI-compatible API.
-
-> ⚠️ Note: The default base URL (`https://zukijourney.xyzbot.net`) currently appears unreachable. You can customize the base URL if needed or mock the responses during development.
-
-
 
 ## ✨ Features
 
@@ -26,7 +23,7 @@
 ## 📦 Installation
 
 ```bash
-go get github.com/onihilist/zukigo
+go get github.com/onihilist/zukigo@v0.1.1
 ```
 
 

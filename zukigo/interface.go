@@ -8,6 +8,6 @@ type ZukiInterface struct {
 func New(auth string) *ZukiInterface {
 	return &ZukiInterface{
 		Auth:    auth,
-		BaseURL: "https://zukijourney.xyzbot.net",
+		BaseURL: "https://api.zukijourney.com",
 	}
 }
