@@ -23,7 +23,7 @@
 ## 📦 Installation
 
 ```bash
-go get github.com/onihilist/zukigo@v0.1.2
+go get github.com/onihilist/zukigo@v0.1.3
 ```
 
 
