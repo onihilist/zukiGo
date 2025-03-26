@@ -1,104 +1,83 @@
-# ZukiAPI (Go Wrapper)
+# ZukiGo
 
-ZukiAPI is a lightweight REST API written in Golang that serves as a **gateway (wrapper)** around a third-party OpenAI-compatible API (e.g. [zukijourney.xyzbot.net](https://zukijourney.xyzbot.net)).
+**ZukiGo** is a lightweight Go client library that acts as a wrapper for a third-party OpenAI-compatible API.
 
-It exposes two simple endpoints:
-- `/chat` for text generation
-- `/image` for image generation
+> ⚠️ Note: The default base URL (`https://zukijourney.xyzbot.net`) currently appears unreachable. You can customize the base URL if needed or mock the responses during development.
 
----
 
-## 🚀 Features
 
-✅ REST API built with Gin  
-✅ Authenticates requests using an API key  
-✅ Clean `ZukiInterface` client structure  
-✅ Easily extensible for other endpoints
+## ✨ Features
 
----
+- Simple, clean interface for sending chat and image requests  
+- Authenticated via Bearer token  
+- Fully decoupled: no web server included  
+- Easy to integrate into any Go project  
 
-## 🛠️ Tech Stack
 
-- Go 1.20+
-- Gin (web framework)
-- net/http (standard HTTP client)
-- JSON encoding/decoding
-- `.env` file support (optional)
+## 🛠 Tech Stack
 
----
+- **Go 1.20+**
+- Standard `net/http` client
+- JSON (encoding/decoding)
+- Modular Go packages (`interface.go`, `chat.go`, `image.go`, `request.go`)
 
-## ⚙️ Setup
 
-### 1. Clone the repo
+
+## 📦 Installation
 
 ```bash
-git clone https://github.com/youruser/zukiapi.git
-cd zukiapi
+go get github.com/onihilist/zukigo
 ```
 
-### 2. Initialize Go modules
 
-```bash
-go mod tidy
-```
+## 🧱 Library Structure
 
-### 3. Set your API key
+- **interface.go** – Struct and constructor for ZukiInterface
 
-```bash
-export ZUKI_API_KEY=your_api_key_here
-```
+- **chat.go** – ChatCall(model, messages) method
 
-### 4. Run the API
+- **image.go** – ImageCall(model, prompt, size, quality, n) method
 
-```bash
-go run main.go
-```
+- **request.go** – Internal method to send HTTP POST requests
 
----
+## 🔐 Authentication
 
-## 🔌 Available Endpoints
+The library uses a Bearer token for authentication.<br>
+`zuki := zukiapi.New("your_api_key")
+`
 
-`POST /chat`
+## 🧑‍💻 Usage Example
 
-Request:
-```json
-{
-  "model": "gpt-3.5-turbo",
-  "messages": [
-    { "role": "user", "content": "Hello!" }
-  ]
-}
-```
+```go
+package main
 
-Response :
+import (
+    "fmt"
+    "github.com/onihilist/zukigo"
+)
 
-```json
-{
-  "id": "...",
-  "choices": [...]
-}
-```
----
+func main() {
+    zuki := zukiapi.New("your_api_key")
 
-`POST /image`
+    // Chat example
+    messages := []zukiapi.ChatMessage{
+        {Role: "user", Content: "Hello world"},
+    }
 
-Request:
-```json
-{
-  "prompt": "A robot in Paris",
-  "model": "flux-schnell",
-  "size": "512x512",
-  "quality": "standard",
-  "n": 1
-}
-```
+    // Chat generation exemple
+    chatResp, err := zuki.ChatCall("gpt-3.5-turbo", messages)
+    if err != nil {
+        fmt.Println("Chat error:", err)
+        return
+    }
+    fmt.Println("Chat response:", string(chatResp))
 
-Response :
-
-```json
-{
-  "data": [
-    { "url": "https://..." }
-  ]
+    // Image generation example
+    imgResp, err := zuki.ImageCall("flux-schnell", "A robot in Paris", "512x512", "standard", 1)
+    if err != nil {
+        fmt.Println("Image error:", err)
+        return
+    }
+    fmt.Println("Image response:", string(imgResp))
 }
 ```
