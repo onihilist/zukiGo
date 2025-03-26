@@ -1,24 +1,32 @@
 package main
 
 import (
-	"log"
-	"os"
-	"zukiapi/handlers"
-	"zukiapi/services"
-
-	"github.com/gin-gonic/gin"
+	"fmt"
+	"zukigo/zukigo"
 )
 
 func main() {
-	apiKey := os.Getenv("ZUKI_API_KEY")
-	if apiKey == "" {
-		log.Fatal("[ERROR] - ZUKI_API_KEY must be set in environment variables")
+	// Define your API key here
+	zuki := zukigo.New("your_api_key")
+
+	messages := []zukigo.ChatMessage{
+		{Role: "user", Content: "Hello world"},
 	}
 
-	services.InitZuki(apiKey)
+	// Call for generate a chat
+	resp, err := zuki.ChatCall("gpt-3.5-turbo", messages)
+	if err != nil {
+		fmt.Println("Chat error:", err)
+	} else {
+		fmt.Println("Chat response:", string(resp))
+	}
 
-	r := gin.Default()
-	r.POST("/chat", handlers.ChatHandler)
-	r.POST("/image", handlers.ImageHandler)
-	r.Run(":8080")
+	// Call for generate an image
+	imgResp, err := zuki.ImageCall("flux-schnell", "A robot in Paris", "512x512", "standard", 1)
+	if err != nil {
+		fmt.Println("Image error:", err)
+	} else {
+		fmt.Println("Image response:", string(imgResp))
+	}
+
 }
